@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Route Gradient</string>
 
+    <string name="action_settings">Settings</string>
+
     <!--Preferences strings-->
     <string name="pref_units_key">pref_units</string>
     <string name="pref_units_title">Elevation Units</string>
