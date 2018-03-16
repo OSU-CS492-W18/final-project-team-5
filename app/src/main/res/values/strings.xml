@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Route Gradient</string>
+
+    <!--Preferences strings-->
+    <string name="pref_units_key">pref_units</string>
+    <string name="pref_units_title">Elevation Units</string>
+    <string name="pref_units_entry_meters">Meters</string>
+    <string name="pref_units_value_meters" translatable="false">meters</string>
+    <string name="pref_units_entry_feet">Feet</string>
+    <string name="pref_units_value_feet" translatable="false">feet</string>
+    <string name="pref_units_default">@string/pref_units_value_meters</string>
 </resources>
