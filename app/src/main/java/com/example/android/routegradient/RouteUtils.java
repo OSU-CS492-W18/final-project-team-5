@@ -16,9 +16,12 @@ public class RouteUtils {
     private final static String DIRECTIONS_BASE_URL = "https://maps.googleapis.com/maps/api/directions";
     private final static String DIRECTIONS_FORMAT = "json";
 
-    public static String buildRouteURL(String routeStart, String routeEnd){
+    public static String buildRouteURL(String routeStart, String routeEnd, String mode){
         return Uri.parse(DIRECTIONS_BASE_URL).buildUpon()
                 .appendPath(DIRECTIONS_FORMAT)
+                .appendQueryParameter("origin", routeStart)
+                .appendQueryParameter("destination", routeEnd)
+                .appendQueryParameter("mode", mode)
                 .appendQueryParameter("key", BuildConfig.DIRECTIONS_KEY)
                 .build()
                 .toString();

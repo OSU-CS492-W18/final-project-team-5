@@ -24,15 +24,15 @@ android {
 
 }
 def getDirectionsKey(){
-    def Properties props = new Properties()
+    Properties props = new Properties()
     props.load(new FileInputStream(new File('secrets.properties')))
     return props['DIRECTIONS_KEY']
 }
 
 def getElevationKey(){
-    def Properties props = new Properties()
+    Properties props = new Properties()
     props.load(new FileInputStream(new File('secrets.properties')))
-    return props['ELEVATION_KEY ']
+    return props['ELEVATION_KEY']
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
