@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Route Gradient</string>
-
     <string name="action_settings">Settings</string>
+    <string name="loading_error_message">Unable to execute search. Check your internet connection and try again.</string>
 
     <!--Preferences strings-->
     <string name="pref_units_key">pref_units</string>
