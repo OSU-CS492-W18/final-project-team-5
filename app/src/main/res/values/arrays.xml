@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_units_entries">
+        <item>@string/pref_units_entry_meters</item>
+        <item>@string/pref_units_entry_feet</item>
+    </string-array>
+    <string-array name="pref_units_values">
+        <item>@string/pref_units_value_meters</item>
+        <item>@string/pref_units_value_feet</item>
+    </string-array>
+
+    <string-array name="pref_data_entries">
+        <item>@string/pref_data_entry_percent</item>
+        <item>@string/pref_data_entry_total</item>
+    </string-array>
+    <string-array name="pref_data_values">
+        <item>@string/pref_data_value_percent</item>
+        <item>@string/pref_data_value_total</item>
+    </string-array>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="@string/pref_units_key"
+        android:title="@string/pref_units_title"
+        android:dialogTitle="@string/pref_units_title"
+        android:entries="@array/pref_units_entries"
+        android:entryValues="@array/pref_units_values"
+        android:defaultValue="@string/pref_units_default"
+        android:summary="%s" />
+
+    <ListPreference
+        android:key="@string/pref_data_key"
+        android:title="@string/pref_data_title"
+        android:dialogTitle="@string/pref_data_title"
+        android:entries="@array/pref_data_entries"
+        android:entryValues="@array/pref_data_values"
+        android:defaultValue="@string/pref_data_default"
+        android:summary="%s" />
+
+    <EditTextPreference
+        android:key="@string/pref_samples_key"
+        android:title="@string/pref_samples_title"
+        android:dialogTitle="@string/pref_samples_title"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
+        android:defaultValue="@string/pref_samples_default" />
+
+</PreferenceScreen>

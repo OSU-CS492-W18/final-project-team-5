@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Route Gradient</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!--Preferences strings-->
+    <string name="pref_units_key">pref_units</string>
+    <string name="pref_units_title">Elevation Units</string>
+    <string name="pref_units_entry_meters">Meters</string>
+    <string name="pref_units_value_meters" translatable="false">meters</string>
+    <string name="pref_units_entry_feet">Feet</string>
+    <string name="pref_units_value_feet" translatable="false">feet</string>
+    <string name="pref_units_default">@string/pref_units_value_meters</string>
+
+    <string name="pref_data_key">pref_data</string>
+    <string name="pref_data_title">Result Data</string>
+    <string name="pref_data_entry_percent">Percent gradient</string>
+    <string name="pref_data_value_percent" translatable="false">percent</string>
+    <string name="pref_data_entry_total">Total change</string>
+    <string name="pref_data_value_total" translatable="false">total</string>
+    <string name="pref_data_default">@string/pref_data_value_total</string>
+
+    <string name="pref_samples_key">pref_samples</string>
+    <string name="pref_samples_title">Number of Samples</string>
+    <string name="pref_samples_default">1</string>
 </resources>
