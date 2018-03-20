@@ -120,9 +120,16 @@ public class MainActivity extends AppCompatActivity {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (s != null) {
                 Log.d(TAG, "Elevation Utils API result: " + s);
-                ArrayList<Integer> elevationResult = ElevationUtils.parseElevationJSON(s);
+                ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
                 Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
+                ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseDistanceBetweenSamplesJSON(s);
+                Log.d(TAG, "Elevation Utils parsed result for distance between samples: " + distanceBetweenSamples);
+                ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, distanceBetweenSamples);
+                Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
                 mLoadingErrorMessage.setVisibility(View.INVISIBLE);
+                Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
+                Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
+                Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
             }

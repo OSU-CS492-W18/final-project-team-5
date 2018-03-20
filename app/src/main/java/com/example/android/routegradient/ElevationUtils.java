@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
@@ -30,20 +31,36 @@ public class ElevationUtils {
                 .toString();
     }
 
-    public static ArrayList<Integer> parseElevationJSON(String elevationJSON){
-        ArrayList<Integer> elevations = new ArrayList<>(512);
+    public static ArrayList<Double> parseElevationJSON(String elevationJSON){
+        ArrayList<Double> elevations = new ArrayList<>();
 
         JsonParser jsonParser = new JsonParser();
         JsonArray elevationData = jsonParser.parse(elevationJSON)
                 .getAsJsonObject().getAsJsonArray("results");
 
         for(JsonElement res : elevationData){
-            Integer elevation = res.getAsJsonObject().get("elevation").getAsInt();
+            Double elevation = res.getAsJsonObject().get("elevation").getAsDouble();
 
             elevations.add(elevation);
         }
 
         return elevations;
+    }
+    //List<int[]> myList = new ArrayList<int[]>();
+    public static ArrayList<Double> parseDistanceBetweenSamplesJSON(String elevationJSON){
+        ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonArray elevationData = jsonParser.parse(elevationJSON)
+                .getAsJsonObject().getAsJsonArray("results");
+
+
+        for(JsonElement res : elevationData){
+            Double distance = res.getAsJsonObject().get("resolution").getAsDouble();
+            distanceBetweenSamples.add(distance);
+        }
+
+        return distanceBetweenSamples;
     }
 
 }
