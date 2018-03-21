@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mRoute2EditText;
     private ProgressBar mLoadingProgressBar;
     private TextView mLoadingErrorMessage;
+    private TextView mBadResultErrorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         mRoute2EditText = (EditText)findViewById(R.id.et_route2_entry);
         mLoadingProgressBar = (ProgressBar)findViewById(R.id.pb_loading_indicator);
         mLoadingErrorMessage = (TextView)findViewById(R.id.tv_loading_error);
+        mBadResultErrorMessage = (TextView)findViewById(R.id.tv_bad_result_error);
 
         Button routeButton = (Button)findViewById(R.id.btn_find_route);
         routeButton.setOnClickListener(new View.OnClickListener() {
@@ -82,12 +84,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            mLoadingErrorMessage.setVisibility(View.INVISIBLE);
+            mBadResultErrorMessage.setVisibility(View.INVISIBLE);
             if (s != null) {
-                Log.d(TAG, "Route Utils API result: " + s);
-                String routeResult = RouteUtils.parseRouteJSON(s);
-                Log.d(TAG, "Route Utils parsed result: " + routeResult);
-                mLoadingErrorMessage.setVisibility(View.INVISIBLE);
-                doElevationSearch(routeResult);
+                if (RouteUtils.getStatusFromJSON(s).equals("OK")) {
+                    Log.d(TAG, "Route Utils API result: " + s);
+                    String routeResult = RouteUtils.parseRouteJSON(s);
+                    Log.d(TAG, "Route Utils parsed result: " + routeResult);
+                    doElevationSearch(routeResult);
+                }
+                else {
+                    mBadResultErrorMessage.setVisibility(View.VISIBLE);
+                }
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
             }
