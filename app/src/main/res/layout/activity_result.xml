@@ -7,4 +7,58 @@
     android:orientation="vertical"
     tools:context="com.example.android.routegradient.ResultActivity">
 
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="267dp"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/max_gradient"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_results_max_gradient"
+        android:layout_width= "match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textSize="30sp"
+        android:padding="8dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_gradient_change"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_total_gradient_change"
+        android:layout_width= "match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textSize="30sp"
+        android:padding="8dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_elevation_change"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_total_elevation_change"
+        android:layout_width= "match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textSize="30sp"
+        android:padding="8dp"
+        />
+
+
+
+
 </LinearLayout>

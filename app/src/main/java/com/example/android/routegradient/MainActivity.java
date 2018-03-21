@@ -14,9 +14,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String EXTRA_JSON = "com.example.android.routegradient.json";
 
     private final static String TAG = MainActivity.class.getSimpleName();
     private EditText mRoute1EditText;
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void doRouteSearch(String routeStart, String routeEnd) {
         String default_travel_mode = "bicycling";
@@ -122,18 +127,25 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Elevation Utils API result: " + s);
                 ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
                 Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
-                ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseDistanceBetweenSamplesJSON(s);
-                Log.d(TAG, "Elevation Utils parsed result for distance between samples: " + distanceBetweenSamples);
+                ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
+                Log.d(TAG, "Elevation Utils parsed result for latitude/longitude samples: " + distanceBetweenSamples);
                 ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, distanceBetweenSamples);
                 Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
                 mLoadingErrorMessage.setVisibility(View.INVISIBLE);
                 Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
                 Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
                 Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
+                viewResults(s);
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public void viewResults(String s){
+        Intent intent = new Intent(this, ResultActivity.class);
+        intent.putExtra(EXTRA_JSON,s);
+        startActivity(intent);
     }
 
     @Override

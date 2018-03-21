@@ -23,4 +23,8 @@
     <string name="pref_samples_key">pref_samples</string>
     <string name="pref_samples_title">Number of Samples</string>
     <string name="pref_samples_default">1</string>
+
+    <string name = "max_gradient">Maximum Gradient: </string>
+    <string name = "total_gradient_change">Gradient From Start to End: </string>
+    <string name = "total_elevation_change">Net Elevation Change: </string>
 </resources>

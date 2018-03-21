@@ -63,4 +63,25 @@ public class ElevationUtils {
         return distanceBetweenSamples;
     }
 
+    public static ArrayList<Double> parseLatLngFromJSON(String json){
+
+        ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonArray elevationData = jsonParser.parse(json)
+                .getAsJsonObject().getAsJsonArray("results");
+
+
+        for(JsonElement res : elevationData){
+            Double distance1  = res.getAsJsonObject().get("location").getAsJsonObject().get("lat").getAsDouble();
+            distanceBetweenSamples.add(distance1);
+            Double distance2 = res.getAsJsonObject().get("location").getAsJsonObject().get("lng").getAsDouble();
+            distanceBetweenSamples.add(distance2);
+        }
+
+        return distanceBetweenSamples;
+
+
+    }
+
 }
