@@ -34,6 +34,15 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tv_bad_result_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:text="@string/bad_result_error_message"
+            android:visibility="invisible"/>
+
+        <TextView
             android:id="@+id/tv_loading_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -7,6 +7,9 @@ import com.google.gson.JsonParser;
 
 import com.example.android.routegradient.BuildConfig;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by cbenson on 3/17/18.
  */
@@ -25,6 +28,17 @@ public class RouteUtils {
                 .appendQueryParameter("key", BuildConfig.DIRECTIONS_KEY)
                 .build()
                 .toString();
+    }
+
+    public static String getStatusFromJSON(String routeJSON) {
+        String status = "";
+        try {
+            status = new JSONObject(routeJSON).getString("status");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return status;
     }
 
     public static String parseRouteJSON(String routeJSON){
