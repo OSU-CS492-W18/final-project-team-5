@@ -7,6 +7,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
@@ -98,11 +99,24 @@ public class ResultActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_location:
+                showRouteMap();
+                return true;
             case R.id.action_share:
                 shareRoute();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void showRouteMap() {
+        String mapString = "google.navigation:q="+endLocation+"&mode=b";
+        Uri gmmIntentUri = Uri.parse(mapString);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
         }
     }
 
