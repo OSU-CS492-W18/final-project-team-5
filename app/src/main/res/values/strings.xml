@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">Route Gradient</string>
-    <string name="action_settings">Settings</string>
     <string name="loading_error_message">Unable to execute search. Check your internet connection and try again.</string>
     <string name="bad_result_error_message">Something went wrong. Make sure you have the right coordinates and try again.</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_map">View route on map</string>
+    <string name="action_share">Share</string>
+    <string name="share_chooser">Select an app to share this route</string>
 
     <!--Preferences strings-->
     <string name="pref_units_key">pref_units</string>

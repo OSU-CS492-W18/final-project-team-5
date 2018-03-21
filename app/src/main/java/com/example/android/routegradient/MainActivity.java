@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mLoadingProgressBar;
     private TextView mLoadingErrorMessage;
     private TextView mBadResultErrorMessage;
+    private String startLocation;
+    private String endLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         routeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String startLocation = mRoute1EditText.getText().toString();
-                String endLocation = mRoute2EditText.getText().toString();
+                startLocation = mRoute1EditText.getText().toString();
+                endLocation = mRoute2EditText.getText().toString();
                 if (!TextUtils.isEmpty(startLocation) && !TextUtils.isEmpty(endLocation)) {
                     doRouteSearch(startLocation, endLocation);
                 }
@@ -153,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
     public void viewResults(String s){
         Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra(EXTRA_JSON,s);
+        intent.putExtra("startingLocation",startLocation);
+        intent.putExtra("endingLocation",endLocation);
         startActivity(intent);
     }
 
