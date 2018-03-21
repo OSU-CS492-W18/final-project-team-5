@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,12 +24,11 @@
 
     <TextView
         android:id="@+id/tv_results_max_gradient"
-        android:layout_width= "match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
         android:padding="8dp"
-        />
+        android:textSize="30sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,12 +38,11 @@
 
     <TextView
         android:id="@+id/tv_total_gradient_change"
-        android:layout_width= "match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
         android:padding="8dp"
-        />
+        android:textSize="30sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,14 +52,12 @@
 
     <TextView
         android:id="@+id/tv_total_elevation_change"
-        android:layout_width= "match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
         android:padding="8dp"
-        />
-
-
+        android:textSize="30sp" />
 
 
 </LinearLayout>
+</ScrollView>

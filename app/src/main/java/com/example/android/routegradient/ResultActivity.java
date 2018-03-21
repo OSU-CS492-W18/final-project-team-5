@@ -9,8 +9,11 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,6 +29,8 @@ public class ResultActivity extends AppCompatActivity{
     private TextView mMaxGradientTV;
     private TextView mTotalGradientChangeTV;
     private TextView mTotalElevationChangeTV;
+    private String startLocation;
+    private String endLocation;
 
 
     @Override
@@ -35,6 +40,8 @@ public class ResultActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         String json = intent.getStringExtra(MainActivity.EXTRA_JSON);
+        startLocation = intent.getStringExtra("startingLocation");
+        endLocation = intent.getStringExtra("endingLocation");
 
         mMaxGradientTV = (TextView)findViewById(R.id.tv_results_max_gradient);
         mTotalGradientChangeTV = (TextView)findViewById(R.id.tv_total_gradient_change);
@@ -79,5 +86,36 @@ public class ResultActivity extends AppCompatActivity{
 
     private static double round(double value, int decimalPlaces){
         return (double)Math.round(value * Math.pow(10,decimalPlaces)) / Math.pow(10,decimalPlaces);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.result,
+                menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                shareRoute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void shareRoute() {
+        if (startLocation != null && endLocation != null) {
+            String shareText = "Route information for " + startLocation + " to " + endLocation +
+                    ": " + mMaxGradientTV.getText().toString() + " max gradient, " +
+                    mTotalElevationChangeTV.getText().toString() + " net elevation change";
+            ShareCompat.IntentBuilder.from(this)
+                    .setType("text/plain")
+                    .setText(shareText)
+                    .setChooserTitle(R.string.share_chooser)
+                    .startChooser();
+        }
     }
 }
