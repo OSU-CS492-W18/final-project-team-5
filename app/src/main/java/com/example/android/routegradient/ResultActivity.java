@@ -1,12 +1,9 @@
 package com.example.android.routegradient;
 
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -20,12 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 
 public class ResultActivity extends AppCompatActivity{
 
@@ -37,7 +31,6 @@ public class ResultActivity extends AppCompatActivity{
     private String startLocation;
     private String endLocation;
     SharedPreferences mSharedPreferences;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +96,6 @@ public class ResultActivity extends AppCompatActivity{
             mTotalGradientChangeTV.setText(String.format("%s%%", round(totalGradientChange, 4)));
         }
         mMaxGradientTV.setText(String.format("%s%%", round(gradients.get(maxIndex), 4)));
-
-
     }
 
     private void plotGraph(ArrayList<Double> elevationResult, ArrayList<Double> distanceBetweenSamples, double units){
@@ -164,9 +155,16 @@ public class ResultActivity extends AppCompatActivity{
 
     public void shareRoute() {
         if (startLocation != null && endLocation != null) {
+            String shareString = "";
+            if(mSharedPreferences.getString(getString(R.string.pref_data_key),getString(R.string.pref_data_default)).equals("total")) {
+                shareString = " total elevation change";
+            }
+            else {
+                shareString = " total gradient";
+            }
             String shareText = "Route information for " + startLocation + " to " + endLocation +
                     ": " + mMaxGradientTV.getText().toString() + " max gradient, " +
-                    mTotalGradientChangeTV.getText().toString() + " net elevation change";
+                    mTotalGradientChangeTV.getText().toString() + shareString;
             ShareCompat.IntentBuilder.from(this)
                     .setType("text/plain")
                     .setText(shareText)

@@ -8,8 +8,6 @@ import java.util.ArrayList;
  */
 
 public class GradientUtils {
-
-
     /*
     Figures out the total elevation change as a distance
      */
@@ -22,7 +20,6 @@ public class GradientUtils {
         double deltaElevationAbs = elevation2-elevation1;
         return deltaElevationAbs;
     }
-
 
     /*
     Figures out the total elevation change as a gradient (-100.0 to 100.0)
@@ -110,7 +107,6 @@ public class GradientUtils {
         }
         return gradient;
     }
-
 
     private static double distance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Radius of the earth

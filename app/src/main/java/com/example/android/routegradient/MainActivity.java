@@ -13,11 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_JSON = "com.example.android.routegradient.json";
-
     private final static String TAG = MainActivity.class.getSimpleName();
     private EditText mRoute1EditText;
     private EditText mRoute2EditText;
@@ -34,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mBadResultErrorMessage;
     private String startLocation;
     private String endLocation;
-
     public String latlngsJson;
     //ArrayList<Double> latlngs;
 
@@ -61,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     private void doRouteSearch(String routeStart, String routeEnd) {
         String default_travel_mode = "bicycling";
@@ -109,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "new lat/lngs parsed: " + latlngs);
                     String[] urls = ElevationUtils.buildElevationURLNew(latlngs);
                     new ElevationSearchTask().execute(urls);
-
 
 //                    Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
 //                    //ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
@@ -158,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
             searchResults += "]}";
             return searchResults;

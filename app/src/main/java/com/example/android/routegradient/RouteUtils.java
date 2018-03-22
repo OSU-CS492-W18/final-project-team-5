@@ -1,12 +1,9 @@
 package com.example.android.routegradient;
 
 import android.net.Uri;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import com.example.android.routegradient.BuildConfig;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,5 +47,4 @@ public class RouteUtils {
                 .getAsJsonObject().getAsJsonObject("polyline");
         return route.get("points").getAsString();
     }
-
 }

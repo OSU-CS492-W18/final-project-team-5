@@ -5,17 +5,13 @@ import android.net.ParseException;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import com.example.android.routegradient.BuildConfig;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,7 +103,6 @@ public class ElevationUtils {
 //        return distanceBetweenSamples;
 //    }
 
-
     public static ArrayList<Double> parseLatLngFromJSON(String json) {
 
         ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
@@ -127,7 +122,6 @@ public class ElevationUtils {
         return distanceBetweenSamples;
     }
 
-
     public static ArrayList<Double> parseLatLngFromJSONTest(String json){
 
         ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
@@ -145,8 +139,6 @@ public class ElevationUtils {
             distanceBetweenSamples.add(distance2);
         }
         return distanceBetweenSamples;
-
-
     }
 
 }
