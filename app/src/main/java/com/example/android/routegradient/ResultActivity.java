@@ -44,7 +44,7 @@ public class ResultActivity extends AppCompatActivity{
         setContentView(R.layout.activity_result);
 
         Intent intent = getIntent();
-        String json = intent.getStringExtra(MainActivity.EXTRA_JSON);
+
         startLocation = intent.getStringExtra("startingLocation");
         endLocation = intent.getStringExtra("endingLocation");
 
@@ -58,10 +58,16 @@ public class ResultActivity extends AppCompatActivity{
         String prefUnits = mSharedPreferences.getString(getString(R.string.pref_units_key),getString(R.string.pref_units_default));
         String prefData = mSharedPreferences.getString(getString(R.string.pref_data_key),getString(R.string.pref_data_default));
 
-        ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
-        ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
+
+        ArrayList<Double> elevationResult = (ArrayList<Double>) intent.getSerializableExtra("elevation");
+        ArrayList<Double> latLngFromJson =  (ArrayList<Double>) intent.getSerializableExtra("latlng");
+        ArrayList<Double> gradients = (ArrayList<Double>) intent.getSerializableExtra("gradients");
+
+        //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
+        //ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
         ArrayList<Double> parseResolution = ElevationUtils.parseDistanceBetweenSamplesJSON(json);
-        ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latLngFromJson);
+        //ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latLngFromJson);
+
         Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, latLngFromJson);
         Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
 

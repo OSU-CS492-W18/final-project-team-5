@@ -2,6 +2,8 @@ package com.example.android.routegradient;
 
 import android.net.Uri;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -9,6 +11,9 @@ import com.example.android.routegradient.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * Created by cbenson on 3/17/18.
@@ -41,14 +46,19 @@ public class RouteUtils {
         return status;
     }
 
-    public static String parseRouteJSON(String routeJSON){
+    public static ArrayList<String> parseRouteJSON(String routeJSON){
+        ArrayList<String> polyLines = new ArrayList<>();
         JsonParser jsonParser = new JsonParser();
-        JsonObject route = jsonParser.parse(routeJSON)
+        JsonArray routeSteps = jsonParser.parse(routeJSON)
                 .getAsJsonObject().getAsJsonArray("routes").get(0)
                 .getAsJsonObject().getAsJsonArray("legs").get(0)
-                .getAsJsonObject().getAsJsonArray("steps").get(0)
-                .getAsJsonObject().getAsJsonObject("polyline");
-        return route.get("points").getAsString();
+                .getAsJsonObject().getAsJsonArray("steps");
+
+        for(JsonElement poly : routeSteps){
+            polyLines.add(poly.getAsJsonObject().getAsJsonObject("polyline").get("points").getAsString());
+        }
+
+        return polyLines;
     }
 
 }
