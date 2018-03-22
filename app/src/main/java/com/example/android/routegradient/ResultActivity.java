@@ -2,6 +2,7 @@ package com.example.android.routegradient;
 
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -45,6 +46,7 @@ public class ResultActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         String json = intent.getStringExtra(MainActivity.EXTRA_JSON);
+        String latlngsJson = intent.getStringExtra("LAT_LNGS_JSON");
         startLocation = intent.getStringExtra("startingLocation");
         endLocation = intent.getStringExtra("endingLocation");
 
@@ -58,9 +60,12 @@ public class ResultActivity extends AppCompatActivity{
         String prefUnits = mSharedPreferences.getString(getString(R.string.pref_units_key),getString(R.string.pref_units_default));
         String prefData = mSharedPreferences.getString(getString(R.string.pref_data_key),getString(R.string.pref_data_default));
 
-        ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
-        ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
-        ArrayList<Double> parseResolution = ElevationUtils.parseDistanceBetweenSamplesJSON(json);
+        ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSONNew(json);
+        ArrayList<Double> latLngFromJson = ElevationUtils.parseLatLngFromJSONTest(latlngsJson);
+
+        //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
+        //ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
+        ArrayList<Double> parseResolution = GradientUtils.parceDistanceBetweenLocations(latLngFromJson);
         ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latLngFromJson);
         Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, latLngFromJson);
         Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
@@ -70,6 +75,7 @@ public class ResultActivity extends AppCompatActivity{
             units = 3.28084;
         }
         plotGraph(elevationResult, parseResolution, units);
+        //plotGraph(elevationResult, units);
 
         System.out.println("gradients= " + gradients);
         double max = 0;
@@ -105,10 +111,16 @@ public class ResultActivity extends AppCompatActivity{
         double x,y;
         x = 0;
         GraphView graph = (GraphView)findViewById(R.id.graph);
+        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        //staticLabelsFormatter.setHorizontalLabels(new String[] {"Distance", "Distance"});
+        //staticLabelsFormatter.setVerticalLabels(new String[] {"Elevation", "Elevation"});
+        //graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         series = new LineGraphSeries<DataPoint>();
-        for(int i = 0; i<elevationResult.size(); i++){
+        System.out.println(elevationResult.size());
+        System.out.println(distanceBetweenSamples.size());
+        for(int i = 0; i<elevationResult.size()-1; i++){
             x = x+distanceBetweenSamples.get(i)*units;
-            //x = x+0.01;
+            //x = x+1;
             y = elevationResult.get(i)*units;
             series.appendData(new DataPoint(x,y), true, elevationResult.size());
         }

@@ -68,6 +68,23 @@ public class GradientUtils {
 //        return gradient;
 //    }
 
+    public static ArrayList<Double> parceDistanceBetweenLocations(ArrayList<Double> LatLngFromJSON){
+        ArrayList<Double> distances = new ArrayList<Double>();
+
+        double lat1, lng1, lat2, lng2;
+
+        for(int i = 0; i<LatLngFromJSON.size()-3; i+=2){
+            lat1 = LatLngFromJSON.get(i);
+            lng1 = LatLngFromJSON.get(i+1);
+            lat2 = LatLngFromJSON.get(i+2);
+            lng2 = LatLngFromJSON.get(i+3);
+
+            double distanceFlat =  distance(lat1, lng1, lat2, lng2);
+            distances.add(distanceFlat);
+        }
+        return distances;
+    }
+
     public static ArrayList<Double> parseAllGradients(ArrayList<Double> elevations, ArrayList<Double> LatLngFromJSON){
         ArrayList<Double> gradient = new ArrayList<Double>();
 
