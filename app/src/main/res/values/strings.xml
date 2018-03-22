@@ -18,9 +18,9 @@
 
     <string name="pref_data_key">pref_data</string>
     <string name="pref_data_title">Result Data</string>
-    <string name="pref_data_entry_percent">Total Gradient</string>
+    <string name="pref_data_entry_percent">Percent gradient</string>
     <string name="pref_data_value_percent" translatable="false">percent</string>
-    <string name="pref_data_entry_total">Total Elevation change</string>
+    <string name="pref_data_entry_total">Total change</string>
     <string name="pref_data_value_total" translatable="false">total</string>
     <string name="pref_data_default">@string/pref_data_value_total</string>
 
@@ -29,6 +29,6 @@
     <string name="pref_samples_default">1</string>
 
     <string name = "max_gradient">Maximum Gradient: </string>
-    <string name = "total_gradient_change">Total Gradient: </string>
-    <string name = "total_elevation_change">Total Elevation Change: </string>
+    <string name = "total_gradient_change">Gradient From Start to End: </string>
+    <string name = "total_elevation_change">Net Elevation Change: </string>
 </resources>

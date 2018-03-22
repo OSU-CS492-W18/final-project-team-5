@@ -7,10 +7,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +29,9 @@ public class ResultActivity extends AppCompatActivity{
     LineGraphSeries<DataPoint> series;
     private TextView mMaxGradientTV;
     private TextView mTotalGradientChangeTV;
-    //private TextView mTotalElevationChangeTV;
-    private TextView mResultsTitleTV;
+    private TextView mTotalElevationChangeTV;
     private String startLocation;
     private String endLocation;
-    SharedPreferences mSharedPreferences;
 
 
     @Override
@@ -50,32 +46,15 @@ public class ResultActivity extends AppCompatActivity{
 
         mMaxGradientTV = (TextView)findViewById(R.id.tv_results_max_gradient);
         mTotalGradientChangeTV = (TextView)findViewById(R.id.tv_total_gradient_change);
-        //mTotalElevationChangeTV = (TextView)findViewById(R.id.tv_total_elevation_change);
-        mResultsTitleTV = (TextView)findViewById(R.id.tv_results_title);
-
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String prefUnits = mSharedPreferences.getString(getString(R.string.pref_units_key),getString(R.string.pref_units_default));
-        String prefData = mSharedPreferences.getString(getString(R.string.pref_data_key),getString(R.string.pref_data_default));
-
+        mTotalElevationChangeTV = (TextView)findViewById(R.id.tv_total_elevation_change);
 
         ArrayList<Double> elevationResult = (ArrayList<Double>) intent.getSerializableExtra("elevation");
         ArrayList<Double> latLngFromJson =  (ArrayList<Double>) intent.getSerializableExtra("latlng");
         ArrayList<Double> gradients = (ArrayList<Double>) intent.getSerializableExtra("gradients");
-
-        //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
-        //ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
-        ArrayList<Double> parseResolution = ElevationUtils.parseDistanceBetweenSamplesJSON(json);
-        //ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latLngFromJson);
-
         Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, latLngFromJson);
         Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
 
-        double units = 1;
-        if(prefUnits.equals("feet")){
-            units = 3.28084;
-        }
-        plotGraph(elevationResult, parseResolution, units);
+        plotGraph(elevationResult, latLngFromJson);
 
         System.out.println("gradients= " + gradients);
         double max = 0;
@@ -86,36 +65,21 @@ public class ResultActivity extends AppCompatActivity{
                 maxIndex = i;
             }
         }
-
-        System.out.println("Pref data:" + prefData + " PrefUnits: " + prefUnits);
-        if(prefData.equals("total")){
-            mResultsTitleTV.setText(getString(R.string.total_elevation_change));
-            if(prefUnits.equals("feet")){
-                totalElevationChange *= 3.28084;
-                mTotalGradientChangeTV.setText(String.format("%s Feet", round(totalElevationChange,4)));
-            }
-            else{
-                mTotalGradientChangeTV.setText(String.format("%s Meters", round(totalElevationChange,4)));
-            }
-        }
-        else {
-            mResultsTitleTV.setText(getString(R.string.total_gradient_change));
-            mTotalGradientChangeTV.setText(String.format("%s%%", round(totalGradientChange, 4)));
-        }
         mMaxGradientTV.setText(String.format("%s%%", round(gradients.get(maxIndex), 4)));
-
+        mTotalGradientChangeTV.setText(String.format("%s%%", round(totalGradientChange,4)));
+        mTotalElevationChangeTV.setText(String.format("%s Meters", round(totalElevationChange,4)));
 
     }
 
-    private void plotGraph(ArrayList<Double> elevationResult, ArrayList<Double> distanceBetweenSamples, double units){
+    private void plotGraph(ArrayList<Double> elevationResult, ArrayList<Double> distanceBetweenSamples){
         double x,y;
         x = 0;
         GraphView graph = (GraphView)findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
         for(int i = 0; i<elevationResult.size(); i++){
-            x = x+distanceBetweenSamples.get(i)*units;
-            //x = x+0.01;
-            y = elevationResult.get(i)*units;
+            //x = x+distanceBetweenSamples.get(i);
+            x = x+0.01;
+            y = elevationResult.get(i);
             series.appendData(new DataPoint(x,y), true, elevationResult.size());
         }
         graph.addSeries(series);
@@ -160,7 +124,7 @@ public class ResultActivity extends AppCompatActivity{
         if (startLocation != null && endLocation != null) {
             String shareText = "Route information for " + startLocation + " to " + endLocation +
                     ": " + mMaxGradientTV.getText().toString() + " max gradient, " +
-                    mTotalGradientChangeTV.getText().toString() + " net elevation change";
+                    mTotalElevationChangeTV.getText().toString() + " net elevation change";
             ShareCompat.IntentBuilder.from(this)
                     .setType("text/plain")
                     .setText(shareText)
