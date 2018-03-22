@@ -19,12 +19,4 @@
         android:defaultValue="@string/pref_data_default"
         android:summary="%s" />
 
-    <EditTextPreference
-        android:key="@string/pref_samples_key"
-        android:title="@string/pref_samples_title"
-        android:dialogTitle="@string/pref_samples_title"
-        android:inputType="numberDecimal"
-        android:digits="0123456789"
-        android:defaultValue="@string/pref_samples_default" />
-
 </PreferenceScreen>
