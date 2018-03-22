@@ -19,7 +19,7 @@ public class ElevationUtils {
 
     private final static String ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation";
     private final static String ELEVATION_FORMAT = "json";
-    private final static String ELEVATION_SAMPLES = "512";
+    private final static String ELEVATION_SAMPLES = "20";
 
     public static String buildElevationURL(String routePath){
         return Uri.parse(ELEVATION_BASE_URL).buildUpon()

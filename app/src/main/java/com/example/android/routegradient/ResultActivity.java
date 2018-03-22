@@ -40,7 +40,7 @@ public class ResultActivity extends AppCompatActivity{
         setContentView(R.layout.activity_result);
 
         Intent intent = getIntent();
-        String json = intent.getStringExtra(MainActivity.EXTRA_JSON);
+
         startLocation = intent.getStringExtra("startingLocation");
         endLocation = intent.getStringExtra("endingLocation");
 
@@ -48,9 +48,9 @@ public class ResultActivity extends AppCompatActivity{
         mTotalGradientChangeTV = (TextView)findViewById(R.id.tv_total_gradient_change);
         mTotalElevationChangeTV = (TextView)findViewById(R.id.tv_total_elevation_change);
 
-        ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(json);
-        ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(json);
-        ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latLngFromJson);
+        ArrayList<Double> elevationResult = (ArrayList<Double>) intent.getSerializableExtra("elevation");
+        ArrayList<Double> latLngFromJson =  (ArrayList<Double>) intent.getSerializableExtra("latlng");
+        ArrayList<Double> gradients = (ArrayList<Double>) intent.getSerializableExtra("gradients");
         Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, latLngFromJson);
         Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
 

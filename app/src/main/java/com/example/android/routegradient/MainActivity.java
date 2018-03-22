@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -29,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView mBadResultErrorMessage;
     private String startLocation;
     private String endLocation;
+    private ArrayList<String> mRouteResult;
+
+    private ArrayList<Double> totalElevation;
+    private ArrayList<Double> totalGradient;
+    private ArrayList<Double> totalDistanceSamples;
+    private ArrayList<Double> totalLatLng;
+
+    private Integer mLoadi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
         mLoadingProgressBar = (ProgressBar)findViewById(R.id.pb_loading_indicator);
         mLoadingErrorMessage = (TextView)findViewById(R.id.tv_loading_error);
         mBadResultErrorMessage = (TextView)findViewById(R.id.tv_bad_result_error);
+
+        totalElevation = new ArrayList<>();
+        totalGradient = new ArrayList<>();
+        totalDistanceSamples = new ArrayList<>();
+        totalLatLng = new ArrayList<>();
+        mRouteResult = new ArrayList<>();
 
         Button routeButton = (Button)findViewById(R.id.btn_find_route);
         routeButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void doRouteSearch(String routeStart, String routeEnd) {
+        resetRoute();
         String default_travel_mode = "bicycling";
         String routeSearchURL = RouteUtils.buildRouteURL(routeStart, routeEnd, default_travel_mode);
         Log.d(TAG, "Using Route Utils with URL: " + routeSearchURL);
@@ -91,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
             if (s != null) {
                 if (RouteUtils.getStatusFromJSON(s).equals("OK")) {
                     Log.d(TAG, "Route Utils API result: " + s);
-                    String routeResult = RouteUtils.parseRouteJSON(s);
-                    Log.d(TAG, "Route Utils parsed result: " + routeResult);
-                    doElevationSearch(routeResult);
+                    mRouteResult.addAll(RouteUtils.parseRouteJSON(s));
+                    mLoadi = 0;
+                    mLoadingProgressBar.setVisibility(View.VISIBLE);
+                    doElevationSearch();
                 }
                 else {
                     mBadResultErrorMessage.setVisibility(View.VISIBLE);
@@ -104,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void doElevationSearch(String routeResult) {
-        String elevationSearchURL = ElevationUtils.buildElevationURL(routeResult);
+    private void doElevationSearch() {
+        String elevationSearchURL = ElevationUtils.buildElevationURL(mRouteResult.get(mLoadi));
         Log.d(TAG, "Using Elevation Utils with URL: " + elevationSearchURL);
         new ElevationSearchTask().execute(elevationSearchURL);
     }
@@ -115,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -132,31 +148,62 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (s != null) {
                 Log.d(TAG, "Elevation Utils API result: " + s);
                 ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
+                totalElevation.addAll(elevationResult);
                 Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
+
                 ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
+                totalDistanceSamples.addAll(distanceBetweenSamples);
                 Log.d(TAG, "Elevation Utils parsed result for latitude/longitude samples: " + distanceBetweenSamples);
+
                 ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, distanceBetweenSamples);
+                totalGradient.addAll(gradients);
                 Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
+
+                ArrayList<Double> latLngFromJson =  ElevationUtils.parseLatLngFromJSON(s);
+                totalLatLng.addAll(latLngFromJson);
+
                 mLoadingErrorMessage.setVisibility(View.INVISIBLE);
                 Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
                 Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
                 Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
-                viewResults(s);
+                mLoadi++;
+                Log.d("loading size", mLoadi.toString() + " " + mRouteResult.size());
+                if(mLoadi == mRouteResult.size()){
+                    Log.d("Done", "done");
+                    viewResults();
+                }
+                else {
+                    doElevationSearch();
+                }
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
             }
+
+
         }
     }
 
-    public void viewResults(String s){
+    public void resetRoute(){
+        mLoadi = 0;
+        totalLatLng.clear();
+        totalDistanceSamples.clear();
+        totalGradient.clear();
+        totalElevation.clear();
+    }
+
+    public void viewResults(){
+        mLoadingProgressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(this, ResultActivity.class);
-        intent.putExtra(EXTRA_JSON,s);
+        intent.putExtra("gradients", totalGradient);
+        intent.putExtra("elevation", totalElevation);
+        intent.putExtra("latlng", totalLatLng);
+        intent.putExtra("pointDistance", totalDistanceSamples);
         intent.putExtra("startingLocation",startLocation);
         intent.putExtra("endingLocation",endLocation);
+
         startActivity(intent);
     }
 
