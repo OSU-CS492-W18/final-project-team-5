@@ -24,10 +24,6 @@
     <string name="pref_data_value_total" translatable="false">total</string>
     <string name="pref_data_default">@string/pref_data_value_total</string>
 
-    <string name="pref_samples_key">pref_samples</string>
-    <string name="pref_samples_title">Number of Samples</string>
-    <string name="pref_samples_default">1</string>
-
     <string name = "max_gradient">Maximum Gradient: </string>
     <string name = "total_gradient_change">Total Gradient: </string>
     <string name = "total_elevation_change">Total Elevation Change: </string>
