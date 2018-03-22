@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mBadResultErrorMessage;
     private String startLocation;
     private String endLocation;
+
+    public String latlngsJson;
+    //ArrayList<Double> latlngs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +98,28 @@ public class MainActivity extends AppCompatActivity {
             mBadResultErrorMessage.setVisibility(View.INVISIBLE);
             if (s != null) {
                 if (RouteUtils.getStatusFromJSON(s).equals("OK")) {
-                    Log.d(TAG, "Route Utils API result: " + s);
-                    String routeResult = RouteUtils.parseRouteJSON(s);
-                    Log.d(TAG, "Route Utils parsed result: " + routeResult);
-                    doElevationSearch(routeResult);
+                    //Log.d(TAG, "Route Utils API result: " + s);
+                    //String routeResult = RouteUtils.parseRouteJSON(s);
+                    //Log.d(TAG, "Route Utils parsed result: " + routeResult);
+                    //doElevationSearch(routeResult);
+                    //TODO ADDED doElevationSearch
+                    //TODO ADDED latlngs
+                    latlngsJson = s;
+                    ArrayList<Double> latlngs = ElevationUtils.parseLatLngFromJSONTest(s);
+                    Log.d(TAG, "new lat/lngs parsed: " + latlngs);
+                    String[] urls = ElevationUtils.buildElevationURLNew(latlngs);
+                    new ElevationSearchTask().execute(urls);
+
+
+//                    Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
+//                    //ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
+//                    ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latlngs);
+//                    mLoadingErrorMessage.setVisibility(View.INVISIBLE);
+//                    //Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
+//                    Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
+//                    Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
+//                    //Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
+//                    viewResults(s);
                 }
                 else {
                     mBadResultErrorMessage.setVisibility(View.VISIBLE);
@@ -120,41 +146,54 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... urls) {
-            String routeSearchURL = urls[0];
-            String searchResults = null;
-            try {
-                searchResults = NetworkUtils.doHTTPGet(routeSearchURL);
-            } catch (IOException e) {
-                e.printStackTrace();
+            String searchResults = "{\"json\" : [";
+            //System.out.println(urls.length + " urls");
+            for(int i = 0; i<urls.length; i++){
+                //String routeSearchURL = urls[0];
+                try {
+                    searchResults = searchResults + NetworkUtils.doHTTPGet(urls[i]);
+                    if(i < urls.length-1){
+                        searchResults = searchResults + ",";
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
+            searchResults += "]}";
             return searchResults;
         }
 
         @Override
         protected void onPostExecute(String s) {
+            //System.out.println("Search results: " + s);
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (s != null) {
-                Log.d(TAG, "Elevation Utils API result: " + s);
-                ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
-                Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
-                ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
-                Log.d(TAG, "Elevation Utils parsed result for latitude/longitude samples: " + distanceBetweenSamples);
-                ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, distanceBetweenSamples);
-                Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
+                //System.out.println("Elevation Utils API result: " + s);
+                //Log.d(TAG, "Elevation Utils API result: " + s);
+                //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
+                //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSONNew(s);
+                //elevationResult = ElevationUtils.parseElevationJSONNew(s);
+                //Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
+                //ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
+                //Log.d(TAG, "Elevation Utils parsed result for latitude/longitude samples: " + distanceBetweenSamples);
+                //ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latlngs);
+                //Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
                 mLoadingErrorMessage.setVisibility(View.INVISIBLE);
-                Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
-                Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
-                Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
-                viewResults(s);
+                //Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
+                //Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
+                //Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
+                viewResults(s, latlngsJson);
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    public void viewResults(String s){
+    public void viewResults(String s, String latlngsParam){
         Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra(EXTRA_JSON,s);
+        intent.putExtra("LAT_LNGS_JSON", latlngsParam);
         intent.putExtra("startingLocation",startLocation);
         intent.putExtra("endingLocation",endLocation);
         startActivity(intent);
