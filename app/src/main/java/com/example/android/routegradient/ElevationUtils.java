@@ -36,35 +36,36 @@ public class ElevationUtils {
                 .toString();
     }
 
+
     public static String[] buildElevationURLNew(ArrayList<Double> latlnglist){
-        String[] searchResults = new String[latlnglist.size()/2];
-        int j = 0;
+        String[] searchResults = new String[1];
+        String url = "https://maps.googleapis.com/maps/api/elevation/json?locations=";
         for(int i = 0; i<latlnglist.size()-1; i+=2){
-            String url = "https://maps.googleapis.com/maps/api/elevation/json?locations="
-                    + latlnglist.get(i) + ","
-                    + latlnglist.get(i+1) +
-                    "&key=" + BuildConfig.ELEVATION_KEY;
-            searchResults[j] = url;
-            j++;
+            url = url + latlnglist.get(i) + "," + latlnglist.get(i+1);
+            if(i<latlnglist.size()-2){
+                url += "|";
+            }
         }
+        url += "&key=" + BuildConfig.ELEVATION_KEY;
+
+        searchResults[0] = url;
+        System.out.println(searchResults[0]);
         return searchResults;
     }
 
-    public static ArrayList<Double> parseElevationJSON(String elevationJSON){
-        ArrayList<Double> elevations = new ArrayList<>();
-
-        JsonParser jsonParser = new JsonParser();
-        JsonArray elevationData = jsonParser.parse(elevationJSON)
-                .getAsJsonObject().getAsJsonArray("results");
-
-        for(JsonElement res : elevationData){
-            Double elevation = res.getAsJsonObject().get("elevation").getAsDouble();
-
-            elevations.add(elevation);
-        }
-
-        return elevations;
-    }
+//    public static String[] buildElevationURLNew(ArrayList<Double> latlnglist){
+//        String[] searchResults = new String[latlnglist.size()/2];
+//        int j = 0;
+//        for(int i = 0; i<latlnglist.size()-1; i+=2){
+//            String url = "https://maps.googleapis.com/maps/api/elevation/json?locations="
+//                    + latlnglist.get(i) + ","
+//                    + latlnglist.get(i+1) +
+//                    "&key=" + BuildConfig.ELEVATION_KEY;
+//            searchResults[j] = url;
+//            j++;
+//        }
+//        return searchResults;
+//    }
 
     public static ArrayList<Double> parseElevationJSONNew(String elevationJSON){
         ArrayList<Double> elevations = new ArrayList<>();
@@ -80,46 +81,9 @@ public class ElevationUtils {
                 Double elevation = res2.getAsJsonObject().get("elevation").getAsDouble();
                 elevations.add(elevation);
             }
-            //Double elevation = res.getAsJsonObject().getAsJsonArray("results");//.getAsJsonObject().get("elevation").getAsDouble();
-            //elevations.add(elevation);
         }
-        //System.out.println(elevations);
+        System.out.println("Size of elevation json: " + elevations.size());
         return elevations;
-    }
-
-//    public static ArrayList<Double> parseDistanceBetweenSamplesJSON(String elevationJSON){
-//        ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
-//
-//        JsonParser jsonParser = new JsonParser();
-//        JsonArray elevationData = jsonParser.parse(elevationJSON)
-//                .getAsJsonObject().getAsJsonArray("results");
-//
-//
-//        for(JsonElement res : elevationData){
-//            Double distance = res.getAsJsonObject().get("resolution").getAsDouble();
-//            distanceBetweenSamples.add(distance);
-//        }
-//
-//        return distanceBetweenSamples;
-//    }
-
-    public static ArrayList<Double> parseLatLngFromJSON(String json) {
-
-        ArrayList<Double> distanceBetweenSamples = new ArrayList<Double>();
-
-        JsonParser jsonParser = new JsonParser();
-        JsonArray elevationData = jsonParser.parse(json)
-                .getAsJsonObject().getAsJsonArray("results");
-
-
-        for(JsonElement res : elevationData){
-            Double distance1  = res.getAsJsonObject().get("location").getAsJsonObject().get("lat").getAsDouble();
-            distanceBetweenSamples.add(distance1);
-            Double distance2 = res.getAsJsonObject().get("location").getAsJsonObject().get("lng").getAsDouble();
-            distanceBetweenSamples.add(distance2);
-        }
-
-        return distanceBetweenSamples;
     }
 
     public static ArrayList<Double> parseLatLngFromJSONTest(String json){
@@ -138,6 +102,7 @@ public class ElevationUtils {
             Double distance2 = res.getAsJsonObject().get("start_location").getAsJsonObject().get("lng").getAsDouble();
             distanceBetweenSamples.add(distance2);
         }
+        System.out.println("size of latlng: " + distanceBetweenSamples.size());
         return distanceBetweenSamples;
     }
 

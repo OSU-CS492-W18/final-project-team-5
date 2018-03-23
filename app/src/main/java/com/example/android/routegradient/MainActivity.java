@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private String startLocation;
     private String endLocation;
     public String latlngsJson;
-    //ArrayList<Double> latlngs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,27 +91,12 @@ public class MainActivity extends AppCompatActivity {
             mBadResultErrorMessage.setVisibility(View.INVISIBLE);
             if (s != null) {
                 if (RouteUtils.getStatusFromJSON(s).equals("OK")) {
-                    //Log.d(TAG, "Route Utils API result: " + s);
-                    //String routeResult = RouteUtils.parseRouteJSON(s);
-                    //Log.d(TAG, "Route Utils parsed result: " + routeResult);
-                    //doElevationSearch(routeResult);
-                    //TODO ADDED doElevationSearch
-                    //TODO ADDED latlngs
                     latlngsJson = s;
                     ArrayList<Double> latlngs = ElevationUtils.parseLatLngFromJSONTest(s);
                     Log.d(TAG, "new lat/lngs parsed: " + latlngs);
                     String[] urls = ElevationUtils.buildElevationURLNew(latlngs);
                     new ElevationSearchTask().execute(urls);
 
-//                    Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
-//                    //ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
-//                    ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latlngs);
-//                    mLoadingErrorMessage.setVisibility(View.INVISIBLE);
-//                    //Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
-//                    Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
-//                    Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
-//                    //Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
-//                    viewResults(s);
                 }
                 else {
                     mBadResultErrorMessage.setVisibility(View.VISIBLE);
@@ -161,20 +145,7 @@ public class MainActivity extends AppCompatActivity {
             //System.out.println("Search results: " + s);
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (s != null) {
-                //System.out.println("Elevation Utils API result: " + s);
-                //Log.d(TAG, "Elevation Utils API result: " + s);
-                //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSON(s);
-                //ArrayList<Double> elevationResult = ElevationUtils.parseElevationJSONNew(s);
-                //elevationResult = ElevationUtils.parseElevationJSONNew(s);
-                //Log.d(TAG, "Elevation Utils parsed result: " + elevationResult);
-                //ArrayList<Double> distanceBetweenSamples =  ElevationUtils.parseLatLngFromJSON(s);
-                //Log.d(TAG, "Elevation Utils parsed result for latitude/longitude samples: " + distanceBetweenSamples);
-                //ArrayList<Double> gradients = GradientUtils.parseAllGradients(elevationResult, latlngs);
-                //Log.d(TAG, "Elevation Utils parsed result for gradients: " + gradients);
                 mLoadingErrorMessage.setVisibility(View.INVISIBLE);
-                //Double totalGradientChange = GradientUtils.parseTotalGradientChange(elevationResult, distanceBetweenSamples);
-                //Double totalElevationChange = GradientUtils.parseTotalElevationChange(elevationResult);
-                //Log.d(TAG, "Total Gradient Change: " + totalGradientChange + " | Total Elevation Change: " + totalElevationChange);
                 viewResults(s, latlngsJson);
             } else {
                 mLoadingErrorMessage.setVisibility(View.VISIBLE);
@@ -185,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
     public void viewResults(String s, String latlngsParam){
         Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra(EXTRA_JSON,s);
+        System.out.println(s.length());
+        System.out.println(latlngsParam.length());
         intent.putExtra("LAT_LNGS_JSON", latlngsParam);
         intent.putExtra("startingLocation",startLocation);
         intent.putExtra("endingLocation",endLocation);

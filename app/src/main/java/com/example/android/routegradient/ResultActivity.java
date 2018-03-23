@@ -102,10 +102,6 @@ public class ResultActivity extends AppCompatActivity{
         double x,y;
         x = 0;
         GraphView graph = (GraphView)findViewById(R.id.graph);
-        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        //staticLabelsFormatter.setHorizontalLabels(new String[] {"Distance", "Distance"});
-        //staticLabelsFormatter.setVerticalLabels(new String[] {"Elevation", "Elevation"});
-        //graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         series = new LineGraphSeries<DataPoint>();
         System.out.println(elevationResult.size());
         System.out.println(distanceBetweenSamples.size());
